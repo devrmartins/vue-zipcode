@@ -5,6 +5,7 @@
         <div class="field has-addons">
           <div class="control is-flex-grow-1">
             <input
+              v-model="search"
               class="input has-text-primary"
               type="text"
               placeholder="Enter Zip Code"
@@ -24,6 +25,11 @@
 <script>
 export default {
   name: "Search",
+  data: () => {
+    return {
+      search: "",
+    };
+  },
 };
 </script>
 
