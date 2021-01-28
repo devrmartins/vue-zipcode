@@ -22,5 +22,17 @@ describe("Search", () => {
     expect(wrapper.html()).toContain("Search is required");
   });
 
-  it.todo("should be a number");
+  it("should have just numbers", async () => {
+    const wrapper = mount(Search);
+    const input = wrapper.find("input");
+    await input.setValue("58000-000");
+    expect(input.element.value).toEqual("58000000");
+  });
+
+  it.todo("should call the api viacep");
+  it.todo("the response should have a logradouro");
+  it.todo("the response should have a bairro");
+  it.todo("the response should have a localidade");
+  it.todo("the response should have a uf");
+  it.todo("the response should have a ddd");
 });

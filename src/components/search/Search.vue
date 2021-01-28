@@ -5,7 +5,7 @@
         <div class="field has-addons">
           <div class="control is-flex-grow-1">
             <input
-              v-model="search"
+              v-model="searchFiltered"
               class="input has-text-primary"
               type="text"
               placeholder="Enter Zip Code"
@@ -32,6 +32,15 @@ export default {
     };
   },
   computed: {
+    searchFiltered: {
+      get() {
+        return this.search;
+      },
+      set(newValue) {
+        if (!newValue) return "";
+        this.search = newValue.replace(/\D/g, "");
+      },
+    },
     error() {
       if (this.search.length < 1) {
         return "Search is required";
