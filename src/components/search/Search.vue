@@ -10,11 +10,12 @@
               type="text"
               placeholder="Enter Zip Code"
             />
+            <div v-if="error">{{ error }}</div>
           </div>
           <div class="control">
-            <a class="button is-info has-background-primary-dark">
+            <button class="button is-info has-background-primary-dark">
               Search
-            </a>
+            </button>
           </div>
         </div>
       </div>
@@ -29,6 +30,15 @@ export default {
     return {
       search: "",
     };
+  },
+  computed: {
+    error() {
+      if (this.search.length < 1) {
+        return "Search is required";
+      } else {
+        return "";
+      }
+    },
   },
 };
 </script>
