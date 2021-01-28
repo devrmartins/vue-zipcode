@@ -3,24 +3,7 @@
     <div class="container">
       <div class="columns">
         <div class="column is-three-fifths is-offset-one-fifth">
-          <div class="card">
-            <div class="card-content">
-              <div class="field has-addons">
-                <div class="control is-flex-grow-1">
-                  <input
-                    class="input has-text-primary"
-                    type="text"
-                    placeholder="Enter Zip Code"
-                  />
-                </div>
-                <div class="control">
-                  <a class="button is-info has-background-primary-dark">
-                    Search
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
+          <Search></Search>
         </div>
       </div>
     </div>
@@ -28,8 +11,11 @@
 </template>
 
 <script>
+import Search from "./components/search/Search";
+
 export default {
   name: "App",
+  components: { Search },
 };
 </script>
 <style>
