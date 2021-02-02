@@ -4,7 +4,7 @@ import Search from "./Search";
 
 jest.mock("axios");
 
-const API = "https://viacep.com.br/ws";
+const API = "http://viacep.com.br/ws";
 const data = {
   data: {
     cep: "01001-000",
@@ -42,7 +42,7 @@ describe("Search", () => {
     const button = wrapper.find("button");
     await button.trigger("click");
 
-    expect(wrapper.html()).toContain("Search is required");
+    expect(wrapper.html()).toContain("Zipcode is required");
   });
 
   it("should have just numbers", async () => {
@@ -50,6 +50,23 @@ describe("Search", () => {
     const input = wrapper.find("input");
     await input.setValue("58000-000");
     expect(input.element.value).toEqual("58000000");
+  });
+
+  it("should have a maximum of 8 characters", async () => {
+    const wrapper = mount(Search);
+    const input = wrapper.find("input");
+    await input.setValue("99995800099999-999999900000");
+    expect(input.element.value.length).toEqual(8);
+  });
+
+  it("should have a minimum of 8 characters", async () => {
+    const wrapper = mount(Search);
+    const input = wrapper.find("input");
+    const button = wrapper.find("button");
+    await input.setValue("999");
+    await button.trigger("click");
+
+    expect(wrapper.html()).toContain("Zipcode is invalid");
   });
 
   it("should call the api viacep", async () => {
