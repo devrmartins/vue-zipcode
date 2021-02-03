@@ -41,7 +41,7 @@ describe("Search", () => {
     jest.clearAllMocks();
   });
 
-  it("should start with value equal to empty", () => {
+  it("should start with zipcode equal to empty", () => {
     expect(searchComponent.vm.zipcode).toEqual("");
   });
 
