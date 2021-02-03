@@ -4,7 +4,6 @@ import Search from "./Search";
 
 jest.mock("axios");
 
-const API = "http://viacep.com.br/ws";
 const data = {
   data: {
     cep: "01001-000",
@@ -21,78 +20,83 @@ const data = {
 };
 
 describe("Search", () => {
+  let searchComponent;
+  const zipcode = "01001000";
+
+  const search = async () => {
+    axios.get.mockResolvedValue(data);
+    await searchComponent.find("input").setValue(zipcode);
+    await searchComponent.vm.search();
+  };
+
+  const haveProperty = async (property) => {
+    await search();
+    expect(searchComponent.vm.result).toHaveProperty(property);
+  };
+
+  beforeEach(() => {
+    searchComponent = mount(Search);
+  });
   afterEach(() => {
     jest.clearAllMocks();
   });
 
   it("should start with value equal to empty", () => {
-    const wrapper = mount(Search);
-    expect(wrapper.vm.zipcode).toEqual("");
+    expect(searchComponent.vm.zipcode).toEqual("");
   });
 
   it("if the search model value is change when value input change", async () => {
-    const wrapper = mount(Search);
-    const input = wrapper.find("input");
+    const input = searchComponent.find("input");
     await input.setValue("58000000");
-    expect(wrapper.vm.zipcode).toEqual("58000000");
+    expect(searchComponent.vm.zipcode).toEqual("58000000");
   });
 
   it("cannot is empty when button is clicked", async () => {
-    const wrapper = mount(Search);
-    const button = wrapper.find("button");
+    const button = searchComponent.find("button");
     await button.trigger("click");
 
-    expect(wrapper.html()).toContain("Zipcode is required");
+    expect(searchComponent.html()).toContain("Zipcode is required");
   });
 
   it("should have just numbers", async () => {
-    const wrapper = mount(Search);
-    const input = wrapper.find("input");
+    const input = searchComponent.find("input");
     await input.setValue("58000-000");
     expect(input.element.value).toEqual("58000000");
   });
 
   it("should have a maximum of 8 characters", async () => {
-    const wrapper = mount(Search);
-    const input = wrapper.find("input");
+    const input = searchComponent.find("input");
     await input.setValue("99995800099999-999999900000");
     expect(input.element.value.length).toEqual(8);
   });
 
   it("should have a minimum of 8 characters", async () => {
-    const wrapper = mount(Search);
-    const input = wrapper.find("input");
-    const button = wrapper.find("button");
+    const input = searchComponent.find("input");
+    const button = searchComponent.find("button");
     await input.setValue("999");
     await button.trigger("click");
 
-    expect(wrapper.html()).toContain("Zipcode is invalid");
+    expect(searchComponent.html()).toContain("Zipcode must be 8 characters");
   });
 
-  it("should call the api viacep", async () => {
+  it("if zipcode is empty don't call method search", async () => {
     axios.get.mockResolvedValue(data);
-    const zipcode = "01001000";
-    const wrapper = mount(Search);
-    const input = wrapper.find("input");
-    const button = wrapper.find("button");
-    await input.setValue("01001000");
+    const button = searchComponent.find("button");
     await button.trigger("click");
 
-    expect(axios.get).toHaveBeenCalledWith(`${API}/${zipcode}/json/`);
+    expect(searchComponent.html()).toContain("Zipcode is required");
   });
 
-  it("if zipcode is empty don't call the api viacep", async () => {
-    axios.get.mockResolvedValue(data);
-    const wrapper = mount(Search);
-    const button = wrapper.find("button");
-    await button.trigger("click");
-
-    expect(axios.get).toHaveBeenCalledTimes(0);
+  it("Call search method and check result", async () => {
+    await search();
+    expect(searchComponent.vm.result).toEqual(data.data);
   });
 
-  it.todo("the response should have a logradouro");
-  it.todo("the response should have a bairro");
-  it.todo("the response should have a localidade");
-  it.todo("the response should have a uf");
-  it.todo("the response should have a ddd");
+  it("the response should have a logradouro", async () =>
+    haveProperty("logradouro"));
+  it("the response should have a bairro", async () => haveProperty("bairro"));
+  it("the response should have a localidade", async () =>
+    haveProperty("localidade"));
+  it("the response should have a uf", async () => haveProperty("uf"));
+  it("the response should have a ddd", async () => haveProperty("ddd"));
 });

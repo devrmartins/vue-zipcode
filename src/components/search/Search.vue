@@ -7,7 +7,7 @@
             <input
               v-model="zipcodeFiltered"
               class="input has-text-primary"
-              maxlength="18"
+              maxlength="8"
               type="text"
               placeholder="Enter Zip Code"
               @keyup="changeZipcode"
@@ -36,7 +36,7 @@ export default {
     return {
       zipcode: "",
       result: {},
-      error: ""
+      error: "",
     };
   },
   methods: {
@@ -50,23 +50,22 @@ export default {
     },
     changeZipcode() {
       if (this.error) {
-        this.error = ""
+        this.error = "";
       }
     },
     validate() {
-
       if (this.zipcode == "" || !this.zipcode) {
         this.error = "Zipcode is required";
         return false;
       }
 
       if (this.zipcode.length < 8) {
-        this.error = "Zipcode is invalid. Must be 8 characters";
+        this.error = "Zipcode must be 8 characters";
         return false;
       }
 
       return true;
-    }
+    },
   },
   computed: {
     zipcodeFiltered: {
@@ -77,7 +76,6 @@ export default {
         if (!newValue) return "";
         newValue = newValue.replace(/\D/g, "");
         this.zipcode = newValue.substr(0, 8);
-        console.log(this.zipcode)
       },
     },
   },
