@@ -3,7 +3,7 @@
     <div class="container">
       <div class="columns">
         <div class="column is-three-fifths is-offset-one-fifth">
-          <Search></Search>
+          <Search />
         </div>
       </div>
     </div>
